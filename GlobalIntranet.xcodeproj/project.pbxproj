@@ -16,6 +16,7 @@
 		C3CEBDC82955111E005BD8D9 /* GlobalIntranetUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CEBDC72955111E005BD8D9 /* GlobalIntranetUITestsLaunchTests.swift */; };
 		C3E21C3E2956752E000098B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C3E21C3D2956752E000098B8 /* GoogleService-Info.plist */; };
 		C3E21C41295675FE000098B8 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C3E21C40295675FE000098B8 /* FirebaseAuth */; };
+		C3E21C47295677D0000098B8 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E21C46295677D0000098B8 /* LoginView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		C3CEBDC52955111E005BD8D9 /* GlobalIntranetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalIntranetUITests.swift; sourceTree = "<group>"; };
 		C3CEBDC72955111E005BD8D9 /* GlobalIntranetUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalIntranetUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		C3E21C3D2956752E000098B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C3E21C46295677D0000098B8 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,8 @@
 		C3CEBDA92955111C005BD8D9 /* GlobalIntranet */ = {
 			isa = PBXGroup;
 			children = (
+				C3E21C432956779C000098B8 /* Model */,
+				C3E21C4229567796000098B8 /* View */,
 				C3E21C3D2956752E000098B8 /* GoogleService-Info.plist */,
 				C3CEBDAA2955111C005BD8D9 /* GlobalIntranetApp.swift */,
 				C3CEBDAC2955111C005BD8D9 /* ContentView.swift */,
@@ -130,6 +134,21 @@
 				C3CEBDC72955111E005BD8D9 /* GlobalIntranetUITestsLaunchTests.swift */,
 			);
 			path = GlobalIntranetUITests;
+			sourceTree = "<group>";
+		};
+		C3E21C4229567796000098B8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C3E21C46295677D0000098B8 /* LoginView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C3E21C432956779C000098B8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,6 +288,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3E21C47295677D0000098B8 /* LoginView.swift in Sources */,
 				C3CEBDAD2955111C005BD8D9 /* ContentView.swift in Sources */,
 				C3CEBDAB2955111C005BD8D9 /* GlobalIntranetApp.swift in Sources */,
 			);
