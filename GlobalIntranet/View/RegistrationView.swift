@@ -1,19 +1,16 @@
 //
-//  LoginView.swift
+//  RegistrationView.swift
 //  GlobalIntranet
 //
-//  Created by Teuer Stein on 24/12/2022.
+//  Created by Teuer Stein on 27/12/2022.
 //
 
 import SwiftUI
 
-struct LoginView: View {
-    // User details
+struct RegistrationView: View {
+    @State var username: String = ""
     @State var emailID: String = ""
     @State var password: String = ""
-    
-    // View Properties
-    @State var createAccount: Bool = false
     
     var body: some View {
         VStack(spacing: 10){
@@ -26,10 +23,14 @@ struct LoginView: View {
                 .hAlign(.leading)
             
             VStack(spacing: 12){
-                TextField("Email", text: $emailID)
+                TextField("Username", text: $username)
                     .textContentType(.emailAddress)
                     .border(1, .gray.opacity(0.5))
                     .padding(.top, 25)
+                
+                TextField("Email", text: $emailID)
+                    .textContentType(.emailAddress)
+                    .border(1, .gray.opacity(0.5))
                 
                 SecureField("Password", text: $password)
                     .textContentType(.emailAddress)
@@ -42,10 +43,9 @@ struct LoginView: View {
                     .hAlign(.trailing)
                 
                 Button {
-                    // Login button
                     
                 } label: {
-                    Text("Sign in")
+                    Text("Sign up")
                         .foregroundColor(.white)
                         .hAlign(.center)
                         .fillView(.black)
@@ -56,11 +56,11 @@ struct LoginView: View {
             // Registration Button
             
             HStack {
-                Text("Don't have an account ?")
+                Text("Already have an account ?")
                     .foregroundColor(.gray)
                 
-                Button("Register Now") {
-                    createAccount.toggle()
+                Button("Login Now") {
+                    
                 }
                 .fontWeight(.bold)
                 .foregroundColor(.black)
@@ -70,43 +70,5 @@ struct LoginView: View {
         }
         .vAlign(.top)
         .padding(15)
-        
-        // Registration View VIA Sheets
-        .fullScreenCover(isPresented: $createAccount) {
-            RegistrationView()
-        }
-    }
-}
-
-
-extension View {
-    func hAlign(_ alignment: Alignment) -> some View{
-        self
-            .frame(maxWidth: .infinity, alignment: alignment)
-    }
-    
-    func vAlign(_ alignment: Alignment) -> some View{
-        self
-            .frame(maxWidth: .infinity, alignment: alignment)
-    }
-    
-    func border(_ width: CGFloat, _ color: Color) -> some View{
-        self
-            .padding(.horizontal, 15)
-            .padding(.vertical, 10)
-            .background{
-                RoundedRectangle(cornerRadius: 5, style: .continuous)
-                    .stroke(color, lineWidth: width)
-            }
-    }
-    
-    func fillView(_ color: Color) -> some View{
-        self
-            .padding(.horizontal, 15)
-            .padding(.vertical, 10)
-            .background{
-                RoundedRectangle(cornerRadius: 5, style: .continuous)
-                    .fill(color)
-            }
     }
 }

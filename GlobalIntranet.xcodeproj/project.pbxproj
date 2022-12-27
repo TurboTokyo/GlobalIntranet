@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C3024D38295A89150084F0C2 /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3024D37295A89150084F0C2 /* RegistrationView.swift */; };
 		C3CEBDAB2955111C005BD8D9 /* GlobalIntranetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CEBDAA2955111C005BD8D9 /* GlobalIntranetApp.swift */; };
 		C3CEBDAD2955111C005BD8D9 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CEBDAC2955111C005BD8D9 /* ContentView.swift */; };
 		C3CEBDAF2955111E005BD8D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3CEBDAE2955111E005BD8D9 /* Assets.xcassets */; };
@@ -37,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C3024D37295A89150084F0C2 /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
+		C3024D39295A8F560084F0C2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C3CEBDA72955111C005BD8D9 /* GlobalIntranet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlobalIntranet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3CEBDAA2955111C005BD8D9 /* GlobalIntranetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalIntranetApp.swift; sourceTree = "<group>"; };
 		C3CEBDAC2955111C005BD8D9 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -100,6 +103,7 @@
 		C3CEBDA92955111C005BD8D9 /* GlobalIntranet */ = {
 			isa = PBXGroup;
 			children = (
+				C3024D39295A8F560084F0C2 /* Info.plist */,
 				C3E21C432956779C000098B8 /* Model */,
 				C3E21C4229567796000098B8 /* View */,
 				C3E21C3D2956752E000098B8 /* GoogleService-Info.plist */,
@@ -140,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				C3E21C46295677D0000098B8 /* LoginView.swift */,
+				C3024D37295A89150084F0C2 /* RegistrationView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -291,6 +296,7 @@
 				C3E21C47295677D0000098B8 /* LoginView.swift in Sources */,
 				C3CEBDAD2955111C005BD8D9 /* ContentView.swift in Sources */,
 				C3CEBDAB2955111C005BD8D9 /* GlobalIntranetApp.swift in Sources */,
+				C3024D38295A89150084F0C2 /* RegistrationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,11 +458,12 @@
 				DEVELOPMENT_TEAM = DHD4365Q83;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = GlobalIntranet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -481,11 +488,12 @@
 				DEVELOPMENT_TEAM = DHD4365Q83;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = GlobalIntranet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
