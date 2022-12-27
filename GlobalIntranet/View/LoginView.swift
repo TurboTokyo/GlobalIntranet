@@ -12,7 +12,7 @@ struct LoginView: View {
     @State var emailID: String = ""
     @State var password: String = ""
     
-    // View Properties
+    // View properties
     @State var createAccount: Bool = false
     
     var body: some View {
