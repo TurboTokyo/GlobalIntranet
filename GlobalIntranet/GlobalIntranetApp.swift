@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
-
-@available(iOS 16.0, *)
+import Firebase
 
 @main
 struct GlobalIntranetApp: App {
+    init() {
+        FirebaseApp.configure()
+    }
+    
     var body: some Scene {
         WindowGroup {
             LoginView()

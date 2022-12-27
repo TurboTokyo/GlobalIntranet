@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct LoginView: View {
     // User details
@@ -14,6 +15,8 @@ struct LoginView: View {
     
     // View properties
     @State var createAccount: Bool = false
+    @State var showError: Bool = false
+    @State var errorMessage: String = ""
     
     var body: some View {
         VStack(spacing: 10){
@@ -35,16 +38,13 @@ struct LoginView: View {
                     .textContentType(.emailAddress)
                     .border(1, .gray.opacity(0.5))
                 
-                Button("Reset password?", action: {})
+                Button("Reset password?", action: resetPassword)
                     .font(.callout)
                     .fontWeight(.medium) // That wasn't an issue feature works from iOS 16.0, so I had to update Xcode
                     .tint(.black)
                     .hAlign(.trailing)
                 
-                Button {
-                    // Login button
-                    
-                } label: {
+                Button(action: loginUser) {
                     Text("Sign in")
                         .foregroundColor(.white)
                         .hAlign(.center)
@@ -75,6 +75,44 @@ struct LoginView: View {
         .fullScreenCover(isPresented: $createAccount) {
             RegistrationView()
         }
+        
+        // Displaying alert
+        .alert(errorMessage, isPresented: $showError, actions: {
+            
+        })
+    }
+    
+    func loginUser() {
+        Task {
+            do {
+                // With the help of Swift concurrency auth can be done with single line
+                try await Auth.auth().signIn(withEmail: emailID, password: password)
+                print("User found")
+            } catch {
+                await setError(error)
+            }
+        }
+    }
+    
+    func resetPassword() {
+        Task {
+            do {
+                // With the help of Swift concurrency auth can be done with single line
+                try await Auth.auth().sendPasswordReset(withEmail: emailID)
+                print("Link sent")
+            } catch {
+                await setError(error)
+            }
+        }
+    }
+    
+    // Displaying errors VIA alert
+    func setError(_ error: Error) async {
+        // UI mast be updated on main thread
+        await MainActor.run(body: {
+            errorMessage = error.localizedDescription
+            showError.toggle()
+        })
     }
 }
 
