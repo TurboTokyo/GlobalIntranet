@@ -6,7 +6,10 @@
 //
 
 import SwiftUI
+import PhotosUI
 import Firebase
+import FirebaseFirestore
+import FirebaseStorage
 
 struct LoginView: View {
     
@@ -18,6 +21,13 @@ struct LoginView: View {
     @State var createAccount: Bool = false
     @State var showError: Bool = false
     @State var errorMessage: String = ""
+    @State var isLoading: Bool = false
+    
+    // User defaults
+    @AppStorage("log_status") var logStatus: Bool = false
+    @AppStorage("user_profile_url") var profileURL: URL?
+    @AppStorage("user_name") var userNameStored: String = ""
+    @AppStorage("user_UID") var userUID: String = ""
     
     var body: some View {
         VStack(spacing: 10){
@@ -70,6 +80,9 @@ struct LoginView: View {
         }
         .vAlign(.top)
         .padding(15)
+        .overlay {
+            LoadingView(show: $isLoading)
+        }
         
         // Registration View VIA Sheets
         .fullScreenCover(isPresented: $createAccount) {
@@ -83,14 +96,33 @@ struct LoginView: View {
     }
     
     func loginUser() {
+        isLoading = true
+        closeKeyboard()
+        
         Task {
             do {
                 // With the help of Swift concurrency auth can be done with single line
                 try await Auth.auth().signIn(withEmail: emailID, password: password)
                 print("User found")
+                try await fetchUser()
             } catch {
                 await setError(error)
             }
+        }
+    }
+    
+    // If User was found then fetching user data from Firestore
+    func fetchUser() async throws {
+        guard let userID = Auth.auth().currentUser?.uid else{return}
+        let user = try await Firestore.firestore().collection("Users").document(userID).getDocument(as: User.self)
+        
+        // UI updating must be run on main thread
+        await MainActor.run {
+            // Setting User defaults data and changing app's auth status
+            userUID = userID
+            userNameStored = user.username
+            profileURL = user.userProfileURL
+            logStatus = true
         }
     }
     
@@ -114,6 +146,7 @@ struct LoginView: View {
         await MainActor.run(body: {
             errorMessage = error.localizedDescription
             showError.toggle()
+            isLoading = false
         })
     }
 }

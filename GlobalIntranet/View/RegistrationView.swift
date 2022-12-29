@@ -164,6 +164,7 @@ struct RegistrationView: View {
     
     func registerUser() {
         isLoading = true
+        closeKeyboard()
         
         Task {
             do {
