@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("log_status") var logStatus: Bool = false
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        // Redirecting User based on log status
+        if logStatus {
+            Text("Main view")
+        } else {
+            LoginView()
+        }
     }
 }
 

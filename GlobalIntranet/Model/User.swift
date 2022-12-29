@@ -17,7 +17,7 @@ struct User: Identifiable, Codable {
     var userEmail: String
     var userProfileURL: URL
     
-    enum CodingKeys: CodingKeys {
+    enum CodingKeys: CodingKey {
         case id
         case username
         case userBio

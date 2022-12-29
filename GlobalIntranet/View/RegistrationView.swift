@@ -28,6 +28,12 @@ struct RegistrationView: View {
     @State var showError: Bool = false
     @State var errorMessage: String = ""
     
+    // User defaults
+    @AppStorage("log_status") var logStatus: Bool = false
+    @AppStorage("user_profile_url") var profileURL: URL?
+    @AppStorage("user_name") var userNameStored: String = ""
+    @AppStorage("user_UID") var userUID: String = ""
+    
     var body: some View {
         VStack(spacing: 10){
             Text("Lets Register\nAccount")
@@ -141,6 +147,13 @@ struct RegistrationView: View {
                     .hAlign(.center)
                     .fillView(.black)
             }
+            .disableWithOpacity(
+                username == "" ||
+                userBio == "" ||
+                emailID == "" ||
+                password == "" ||
+                userProfilePicData == nil
+            )
             .padding(.top, 10)
         }
     }
@@ -161,6 +174,21 @@ struct RegistrationView: View {
                 let downloadURL = try await storageRef.downloadURL()
                 
                 // Fourth task: creating a User Firestore object
+                let user = User(username: username, userBio: userBio, userBioLink: userBioLink, userUID: userUID, userEmail: emailID, userProfileURL: downloadURL)
+                
+                // Fifth task: saving user doc into Firestore database
+                let _ = try Firestore.firestore().collection("Users").document(userUID).setData(from: user, completion: {
+                    error in
+                    if error == nil {
+                        // Print saved successfully
+                        print("Saved successfully")
+                        
+                        userNameStored = username
+                        self.userUID = userUID
+                        profileURL = downloadURL
+                        logStatus = true
+                    }
+                })
             } catch {
                 await setError(error)
             }
