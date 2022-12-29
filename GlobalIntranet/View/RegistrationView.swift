@@ -27,6 +27,7 @@ struct RegistrationView: View {
     @State var photoItem: PhotosPickerItem?
     @State var showError: Bool = false
     @State var errorMessage: String = ""
+    @State var isLoading: Bool = false
     
     // User defaults
     @AppStorage("log_status") var logStatus: Bool = false
@@ -69,6 +70,9 @@ struct RegistrationView: View {
         }
         .vAlign(.top)
         .padding(15)
+        .overlay {
+            LoadingView(show: $isLoading)
+        }
         .photosPicker(isPresented: $showImagePicker, selection: $photoItem)
         .onChange(of: photoItem) { newValue in
             
@@ -159,6 +163,8 @@ struct RegistrationView: View {
     }
     
     func registerUser() {
+        isLoading = true
+        
         Task {
             do {
                 // First task: creating Firebase account
@@ -201,6 +207,7 @@ struct RegistrationView: View {
         await MainActor.run(body: {
             errorMessage = error.localizedDescription
             showError.toggle()
+            isLoading = false
         })
     }
 }
