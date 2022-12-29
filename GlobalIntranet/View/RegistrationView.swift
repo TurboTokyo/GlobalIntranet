@@ -8,8 +8,11 @@
 import SwiftUI
 import PhotosUI
 import Firebase
+import FirebaseFirestore
+import FirebaseStorage
 
 struct RegistrationView: View {
+    
     // User details
     @State var username: String = ""
     @State var emailID: String = ""
@@ -22,6 +25,15 @@ struct RegistrationView: View {
     @Environment(\.dismiss) var dismiss
     @State var showImagePicker: Bool = false
     @State var photoItem: PhotosPickerItem?
+    @State var showError: Bool = false
+    @State var errorMessage: String = ""
+    @State var isLoading: Bool = false
+    
+    // User defaults
+    @AppStorage("log_status") var logStatus: Bool = false
+    @AppStorage("user_profile_url") var profileURL: URL?
+    @AppStorage("user_name") var userNameStored: String = ""
+    @AppStorage("user_UID") var userUID: String = ""
     
     var body: some View {
         VStack(spacing: 10){
@@ -58,8 +70,12 @@ struct RegistrationView: View {
         }
         .vAlign(.top)
         .padding(15)
+        .overlay {
+            LoadingView(show: $isLoading)
+        }
         .photosPicker(isPresented: $showImagePicker, selection: $photoItem)
         .onChange(of: photoItem) { newValue in
+            
             // Extracting UIImage from PhotoItem
             if let newValue {
                 Task {
@@ -76,6 +92,8 @@ struct RegistrationView: View {
                 }
             }
         }
+        // Displaying alert
+        .alert(errorMessage, isPresented: $showError, actions: {})
     }
     
     @ViewBuilder
@@ -127,15 +145,70 @@ struct RegistrationView: View {
                 .tint(.black)
                 .hAlign(.trailing)
             
-            Button {
-                
-            } label: {
+            Button(action: registerUser) {
                 Text("Sign up")
                     .foregroundColor(.white)
                     .hAlign(.center)
                     .fillView(.black)
             }
+            .disableWithOpacity(
+                username == "" ||
+                userBio == "" ||
+                emailID == "" ||
+                password == "" ||
+                userProfilePicData == nil
+            )
             .padding(.top, 10)
         }
+    }
+    
+    func registerUser() {
+        isLoading = true
+        closeKeyboard()
+        
+        Task {
+            do {
+                // First task: creating Firebase account
+                try await Auth.auth().createUser(withEmail: emailID, password: password)
+                
+                // Second task: uploading profile picture into Firebase storage
+                guard let userUID = Auth.auth().currentUser?.uid else{return}
+                guard let imageData = userProfilePicData else{return}
+                let storageRef = Storage.storage().reference().child("Profile_Images").child(userUID)
+                let _ = try await storageRef.putDataAsync(imageData)
+                
+                // Third task: downloading photo URL
+                let downloadURL = try await storageRef.downloadURL()
+                
+                // Fourth task: creating a User Firestore object
+                let user = User(username: username, userBio: userBio, userBioLink: userBioLink, userUID: userUID, userEmail: emailID, userProfileURL: downloadURL)
+                
+                // Fifth task: saving user doc into Firestore database
+                let _ = try Firestore.firestore().collection("Users").document(userUID).setData(from: user, completion: {
+                    error in
+                    if error == nil {
+                        // Print saved successfully
+                        print("Saved successfully")
+                        
+                        userNameStored = username
+                        self.userUID = userUID
+                        profileURL = downloadURL
+                        logStatus = true
+                    }
+                })
+            } catch {
+                await setError(error)
+            }
+        }
+    }
+    
+    // Displaying errors VIA alert
+    func setError(_ error: Error) async {
+        // UI mast be updated on main thread
+        await MainActor.run(body: {
+            errorMessage = error.localizedDescription
+            showError.toggle()
+            isLoading = false
+        })
     }
 }
