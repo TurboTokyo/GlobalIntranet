@@ -8,8 +8,11 @@
 import SwiftUI
 import PhotosUI
 import Firebase
+import FirebaseFirestore
+import FirebaseStorage
 
 struct RegistrationView: View {
+    
     // User details
     @State var username: String = ""
     @State var emailID: String = ""
@@ -22,6 +25,8 @@ struct RegistrationView: View {
     @Environment(\.dismiss) var dismiss
     @State var showImagePicker: Bool = false
     @State var photoItem: PhotosPickerItem?
+    @State var showError: Bool = false
+    @State var errorMessage: String = ""
     
     var body: some View {
         VStack(spacing: 10){
@@ -60,6 +65,7 @@ struct RegistrationView: View {
         .padding(15)
         .photosPicker(isPresented: $showImagePicker, selection: $photoItem)
         .onChange(of: photoItem) { newValue in
+            
             // Extracting UIImage from PhotoItem
             if let newValue {
                 Task {
@@ -76,6 +82,8 @@ struct RegistrationView: View {
                 }
             }
         }
+        // Displaying alert
+        .alert(errorMessage, isPresented: $showError, actions: {})
     }
     
     @ViewBuilder
@@ -127,9 +135,7 @@ struct RegistrationView: View {
                 .tint(.black)
                 .hAlign(.trailing)
             
-            Button {
-                
-            } label: {
+            Button(action: registerUser) {
                 Text("Sign up")
                     .foregroundColor(.white)
                     .hAlign(.center)
@@ -137,5 +143,36 @@ struct RegistrationView: View {
             }
             .padding(.top, 10)
         }
+    }
+    
+    func registerUser() {
+        Task {
+            do {
+                // First task: creating Firebase account
+                try await Auth.auth().createUser(withEmail: emailID, password: password)
+                
+                // Second task: uploading profile picture into Firebase storage
+                guard let userUID = Auth.auth().currentUser?.uid else{return}
+                guard let imageData = userProfilePicData else{return}
+                let storageRef = Storage.storage().reference().child("Profile_Images").child(userUID)
+                let _ = try await storageRef.putDataAsync(imageData)
+                
+                // Third task: downloading photo URL
+                let downloadURL = try await storageRef.downloadURL()
+                
+                // Fourth task: creating a User Firestore object
+            } catch {
+                await setError(error)
+            }
+        }
+    }
+    
+    // Displaying errors VIA alert
+    func setError(_ error: Error) async {
+        // UI mast be updated on main thread
+        await MainActor.run(body: {
+            errorMessage = error.localizedDescription
+            showError.toggle()
+        })
     }
 }

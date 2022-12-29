@@ -9,6 +9,7 @@ import SwiftUI
 import Firebase
 
 struct LoginView: View {
+    
     // User details
     @State var emailID: String = ""
     @State var password: String = ""
@@ -40,7 +41,7 @@ struct LoginView: View {
                 
                 Button("Reset password?", action: resetPassword)
                     .font(.callout)
-                    .fontWeight(.medium) // That wasn't an issue feature works from iOS 16.0, so I had to update Xcode
+                    .fontWeight(.medium)
                     .tint(.black)
                     .hAlign(.trailing)
                 
@@ -54,7 +55,6 @@ struct LoginView: View {
             }
             
             // Registration Button
-            
             HStack {
                 Text("Don't have an account ?")
                     .foregroundColor(.gray)
@@ -97,6 +97,7 @@ struct LoginView: View {
     func resetPassword() {
         Task {
             do {
+                
                 // With the help of Swift concurrency auth can be done with single line
                 try await Auth.auth().sendPasswordReset(withEmail: emailID)
                 print("Link sent")
@@ -108,6 +109,7 @@ struct LoginView: View {
     
     // Displaying errors VIA alert
     func setError(_ error: Error) async {
+        
         // UI mast be updated on main thread
         await MainActor.run(body: {
             errorMessage = error.localizedDescription
