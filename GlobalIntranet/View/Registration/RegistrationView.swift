@@ -168,22 +168,22 @@ struct RegistrationView: View {
         
         Task {
             do {
-                // First task: creating Firebase account
+                // First stage: creating Firebase account
                 try await Auth.auth().createUser(withEmail: emailID, password: password)
                 
-                // Second task: uploading profile picture into Firebase storage
+                // Second stage: uploading profile picture into Firebase storage
                 guard let userUID = Auth.auth().currentUser?.uid else{return}
                 guard let imageData = userProfilePicData else{return}
                 let storageRef = Storage.storage().reference().child("Profile_Images").child(userUID)
                 let _ = try await storageRef.putDataAsync(imageData)
                 
-                // Third task: downloading photo URL
+                // Third stage: downloading photo URL
                 let downloadURL = try await storageRef.downloadURL()
                 
-                // Fourth task: creating a User Firestore object
+                // Fourth stage: creating a User Firestore object
                 let user = User(username: username, userBio: userBio, userBioLink: userBioLink, userUID: userUID, userEmail: emailID, userProfileURL: downloadURL)
                 
-                // Fifth task: saving user doc into Firestore database
+                // Fifth stage: saving user doc into Firestore database
                 let _ = try Firestore.firestore().collection("Users").document(userUID).setData(from: user, completion: {
                     error in
                     if error == nil {
