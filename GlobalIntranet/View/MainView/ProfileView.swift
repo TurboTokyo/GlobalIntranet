@@ -12,7 +12,7 @@ import FirebaseFirestore
 
 struct ProfileView: View {
     // The User's profile data
-    @State var userProfile: User?
+    @State private var userProfile: User?
     @AppStorage("log_status") var logStatus: Bool = false
     
     // View properties
@@ -23,10 +23,14 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             ScrollView(.vertical, showsIndicators: false) {
-                
+                if let userProfile {
+                    Text(userProfile.username)
+                }
             }
             .refreshable {
                 // Refresh user data
+                userProfile = nil
+                await fetchUserData()
             }
             .navigationTitle("My Profile")
             .toolbar {
@@ -50,6 +54,23 @@ struct ProfileView: View {
             LoadingView(show: $isLoading)
         }
         .alert(errorMessage, isPresented: $showError) {}
+        .task {
+            // This modifier is like onAppear
+            // so fetching for the first time only
+            if userProfile != nil {return}
+            
+            // Initial fetch
+            await fetchUserData()
+        }
+    }
+    
+    // Fetching User data
+    func fetchUserData() async {
+        guard let userUID = Auth.auth().currentUser?.uid else{return}
+        guard let user = try? await Firestore.firestore().collection("Users").document(userUID).getDocument(as: User.self) else{return}
+        await MainActor.run {
+            userProfile = user
+        }
     }
     
     // Logging User out
