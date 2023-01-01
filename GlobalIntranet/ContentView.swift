@@ -13,7 +13,7 @@ struct ContentView: View {
     var body: some View {
         // Redirecting User based on log status
         if logStatus {
-            Text("Main view")
+            MainView()
         } else {
             LoginView()
         }
