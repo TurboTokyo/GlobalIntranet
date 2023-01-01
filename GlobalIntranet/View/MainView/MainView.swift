@@ -17,12 +17,14 @@ struct MainView: View {
                     Text("Post's")
                 }
             
-            Text("Provile View")
+            ProfileView()
                 .tabItem {
                     Image(systemName: "gear")
                     Text("Profile")
                 }
         }
+        // Changing tab lable tint to black
+        .tint(.black)
     }
 }
 
